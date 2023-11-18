@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  FormHelperText,
   Box,
   Input,
   Stack,
@@ -35,15 +34,22 @@ class Register extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  onSubmit = async e => {
-    e.preventDefault();
+  isPasswordStrong = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  }
 
+  onSubmit = async e =>{
+    e.preventDefault();
+    if(!this.isPasswordStrong(this.state.password)){
+      this.setState({ message: 'Password is not strong enough', isInvalid: true });
+      return;
+    }
     try {
       const res = await axios.post(this.state.endpoint, {
         username: this.state.username,
         password: this.state.password,
       });
-
       console.log('register', res);
       if (res.data.status) {
         const redirectTo = this.state.redirectTo + this.state.username;
@@ -57,6 +63,30 @@ class Register extends Component {
       this.setState({ message: 'something went wrong', isInvalid: true });
     }
   };
+
+
+  // onSubmit = async e => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const res = await axios.post(this.state.endpoint, {
+  //       username: this.state.username,
+  //       password: this.state.password,
+  //     });
+
+  //     console.log('register', res);
+  //     if (res.data.status) {
+  //       const redirectTo = this.state.redirectTo + this.state.username;
+  //       this.setState({ redirect: true, redirectTo });
+  //     } else {
+  //       // on failed
+  //       this.setState({ message: res.data.message, isInvalid: true });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     this.setState({ message: 'something went wrong', isInvalid: true });
+  //   }
+  // };
 
   render() {
     return (
@@ -94,7 +124,7 @@ class Register extends Component {
                   value={this.state.password}
                   onChange={this.onChange}
                 />
-                <FormHelperText>use a dummy password</FormHelperText>
+                
               </FormControl>
               <Button
                 size="lg"

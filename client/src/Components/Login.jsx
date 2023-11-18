@@ -37,7 +37,10 @@ class Login extends Component {
 
   onSubmit = async e => {
     e.preventDefault();
-
+    if (!this.state.username || !this.state.password) {
+      alert('Username and password cannot be empty.');
+      return;
+    }
     try {
       const res = await axios.post(this.state.endpoint, {
         username: this.state.username,

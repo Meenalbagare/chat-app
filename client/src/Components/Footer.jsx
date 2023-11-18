@@ -6,7 +6,7 @@ function Footer() {
   return (
     <Box padding={8}>
       <Center>
-        <Heading size="sm">Powered by Redis and Golang</Heading>
+        <Heading size="sm">Built with Go and Redis</Heading>
       </Center>
       {/* <Center>
         <Heading fontStyle={'italic'} size="sm" paddingTop={2}>
